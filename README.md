@@ -3,6 +3,8 @@ It's a java exercise.
 
 ## Technologies used
 * Java 8.
+* Spring.
+* Spring boot.
 
 ## Usage
 Just clone the repo to your machine and yo can run the exercise in two ways:
