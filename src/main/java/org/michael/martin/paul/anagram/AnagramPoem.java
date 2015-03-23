@@ -15,19 +15,19 @@ import java.util.regex.Pattern;
  */
 public class AnagramPoem {
 
-	private List<AnagramLine> poem;
+	private List<AnagramVerse> poem;
 		
 	/**
 	 * 
 	 * @param ist The stream from where the AnagramPoem will be constrcuted
 	 */
 	public AnagramPoem(InputStream ist){
-		poem = new LinkedList<AnagramLine>();
+		poem = new LinkedList<AnagramVerse>();
 		try(Scanner s = new Scanner(ist).useDelimiter("\n\n")){
 			while (s.hasNext()){
 			
 			String line = s.next();
-			poem.add(new AnagramLine(line));
+			poem.add(new AnagramVerse(line));
 			
 			}
 		}
@@ -40,14 +40,31 @@ public class AnagramPoem {
 			isAValidAngramPoem = true;
 			Map<String, Long> ocurrencies = poem.get(0).getOcurrencies();
 			
-			for (AnagramLine anagramLine : poem) {
-				Map<String, Long> actOcurrencies = anagramLine.getOcurrencies();
+			// Check if it is an anagram poem by verse
+			for (AnagramVerse anagramVerse : poem) {
+				Map<String, Long> actOcurrencies = anagramVerse.getOcurrencies();
 				isAValidAngramPoem = isAValidAngramPoem && ocurrencies.equals(actOcurrencies);
-				if (! isAValidAngramPoem){
-					return isAValidAngramPoem;
+				if(!isAValidAngramPoem){
+					break;
 				}
 			}
-			return true;
+			if (isAValidAngramPoem){
+				return isAValidAngramPoem;
+			}else{
+				isAValidAngramPoem = true;
+				// Check if it is an anagram poem by  line
+				for (AnagramVerse anagramVerse : poem) {
+					for (AnagramLine line :anagramVerse.getLines()){
+						Map<String, Long> actOcurrencies = line.getOcurrencies();
+						isAValidAngramPoem = isAValidAngramPoem && ocurrencies.equals(actOcurrencies);
+						if (! isAValidAngramPoem){
+							return isAValidAngramPoem;
+						}
+					}
+					
+				}
+			}
+			return isAValidAngramPoem;
 		}else{
 			return isAValidAngramPoem;
 		}
